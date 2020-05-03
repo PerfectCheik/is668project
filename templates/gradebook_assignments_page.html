@@ -18,53 +18,15 @@
                  <li><a href="http://perfectcheik.pythonanywhere.com/student_roster">Student Roster</a></li>
                  <li><a href="http://perfectcheik.pythonanywhere.com/assignments">Assignments</a></li>
                  <li><a href="http://perfectcheik.pythonanywhere.com/student_information">Student Information</a></li>
+
                 {% if current_user.is_authenticated %}
                     <li><a href="http://perfectcheik.pythonanywhere.com/logout">Log out</a></li>
                 {% else %}
                     <li><a href="http://perfectcheik.pythonanywhere.com/login">Log in</a></li>
                 {% endif %}
-
-
                  </ul>
                 </div>
             </div>
 
-
-        </nav>
-        <br><br><br><br><br>
-        <div class="container">
-        {% for comment in comments %}
-            <div style="margin-bottom: 1ex">
-                <div>
-                    {{ comment.content }}
-                </div>
-                <div>
-                    <small>
-                        Posted
-                        {% if comment.posted %}
-                            {{ comment.posted.strftime("%A, %d %B %Y at %H:%M") }}
-                        {% else %}
-                            at an unknown time
-                        {% endif %}
-                        by
-                        {% if comment.commenter %}
-                            {{ comment.commenter.username }}
-                        {% else %}
-                            anonymous
-                        {% endif %}
-                    </small>
-                </div>
-            </div>
-        {% endfor %}
-
-        {% if current_user.is_authenticated %}
-        <div class="row">
-            <form action="." method="POST">
-                <textarea class="form-control" name="contents" placeholder="Enter a comment"></textarea>
-                <input type="submit" class="btn btn-success" value="Post comment">
-            </form>
-        </div>
-        {% endif %}
-        </div><!-- /.container -->
     </body>
 </html>
