@@ -31,12 +31,12 @@ login_manager.init_app(app)
 class User(UserMixin, db.Model):
 
 
-    __tablename__ = "intructors"
+    __tablename__ = "instructors"
 
-    id = db.Column(db.Integer, primary_key=True)
+    instructor_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(128))
     password_hash = db.Column(db.String(128))
-
+    courses = db.relationship("Course", backref="instructors")
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
@@ -50,16 +50,49 @@ class User(UserMixin, db.Model):
 def load_user(user_id):
     return User.query.filter_by(username=user_id).first()
 
-#class Student(db.Model):
+class Course(db.Model):
 
-#    __tablename__ = "students"
+    __tablename__ = "courses"
 
-#    id = db.Column(db.Integer, primary_key=True)
-#    firstname = db.Column(db.String(128))
-#    lastname = db.Column(db.String(128))
-#    posted = db.Column(db.DateTime, default=datetime.now)
-#    commenter_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
-#    commenter = db.relationship('User', foreign_keys=commenter_id)
+    course_id = db.Column(db.Integer, primary_key=True)
+    course_name = db.Column(db.String(128))
+    instructor_id = db.Column(db.Integer, db.ForeignKey('instructors.instructor_id'), nullable=True)
+    instructor = db.relationship('User', foreign_keys=instructor_id)
+
+class Assignment(db.Model):
+
+    __tablename__ = "assignments"
+
+    assignment_id = db.Column(db.Integer, primary_key=True)
+    assignment_desc = db.Column(db.String(128))
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.course_id'), nullable=True)
+    course = db.relationship('Course', foreign_keys=course_id)
+
+
+class Student(db.Model):
+
+    __tablename__ = "students"
+
+    student_id = db.Column(db.Integer, primary_key=True)
+    firstname = db.Column(db.String(128))
+    lastname = db.Column(db.String(128))
+    student_major = db.Column(db.String(128))
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.course_id'), nullable=True)
+    course = db.relationship('Course', foreign_keys=course_id)
+
+class Gradebook(db.Model):
+
+    __tablename__ = "gradebooks"
+
+    gradebook_id = db.Column(db.Integer, primary_key=True)
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.course_id'), nullable=False)
+    student_id = db.Column(db.Integer, db.ForeignKey('students.student_id'), nullable=False)
+    assignment_id = db.Column(db.Integer, db.ForeignKey('assignments.assignment_id'), nullable=False)
+    grade = db.Column(db.Integer)
+    course = db.relationship('Course', foreign_keys=course_id)
+    student = db.relationship('Student', foreign_keys=student_id)
+    assignment = db.relationship('Assignment', foreign_keys=assignment_id)
+
 
 @app.route("/", methods=["GET", "POST"])
 def index():
