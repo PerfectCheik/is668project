@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+        <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <title>Gradebook</title>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                 <ul class="nav navbar-nav">
+                 <li class="active"><a href="http://perfectcheik.pythonanywhere.com/">Gradebook</a></li>
+                 <li><a href="http://perfectcheik.pythonanywhere.com/student_roster">Student Roster</a></li>
+                 <li><a href="http://perfectcheik.pythonanywhere.com/assignments">Assignments</a></li>
+                 <li><a href="http://perfectcheik.pythonanywhere.com/student_information">Student Information</a></li>
+                {% if current_user.is_authenticated %}
+                    <li><a href="http://perfectcheik.pythonanywhere.com/logout">Log out</a></li>
+                {% else %}
+                    <li><a href="http://perfectcheik.pythonanywhere.com/login">Log in</a></li>
+                {% endif %}
+
+
+                 </ul>
+                </div>
+            </div>
+        <h1> Philiospy 101 - Add Students</h1>
+        <h3>Add New Student </h3><br>
+
+        <form method="post" action=".">
+          <p>First Name <input name = "first_name" /></p>
+          <p>Last name <input name = "last_name" /></p>
+          <p>Major <input name = "major" /></p>
+          <p>Email address <input name = "email" /></p>
+          <p></p><input type="submit" value="Submit"></p>
+        </form>
+
+
+
+    </body>
+
+</html>
