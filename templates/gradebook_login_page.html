@@ -1,34 +1,44 @@
+<!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        <title>GradeBook: log in</title>
+      <title>Gradebook</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>>
     </head>
 
     <body>
 
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#">Gradebook</a>
-                 </div>
-                <ul class="nav navbar-nav">
-                 <li class="active"><a href="#">Home</a></li>
-                 <li><a href="#">Page 1</a></li>
-                 <li><a href="#">Page 2</a></li>
-                 <li><a href="#">Page 3</a></li>
-                 </ul>
-            </div>
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="http://perfectcheik.pythonanywhere.com/"> Gradebook  </a></li>
+                 <li class="nav-item">
+                    <a class="nav-link" href="http://perfectcheik.pythonanywhere.com/student_roster"> Student Roster  </a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://perfectcheik.pythonanywhere.com/assignments"> Assignments  </a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://perfectcheik.pythonanywhere.com/student_information"> Student Information  </a></li>
+
+            {% if current_user.is_authenticated %}
+                             <li class="nav-item">
+                    <a class="nav-link" href="http://perfectcheik.pythonanywhere.com/logout"> Log out  </a></li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="http://perfectcheik.pythonanywhere.com/login"> Log in  </a></li>
+            {% endif %}
+            </ul>
         </nav>
 
-        <br><br><br><br><br><br>
 
-        <div class="container">
-        <div class="row">
+        <div class="container-fluid" >
+            <br><br>
+            <h2>Philiospy 101</h2>
+            <h3></h3><br>
+           <p> <div class="row">
                 {% if error %}
                     <div class="alert alert-warning" role="alert">
                         Incorrect username or password
@@ -45,9 +55,12 @@
                   </div>
                   <button type="submit" class="btn btn-success">Log in</button>
                 </form>
-            </div>
 
+            </div></p>
         </div>
 
+
+
     </body>
+
 </html>
