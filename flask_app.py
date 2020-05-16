@@ -4,6 +4,7 @@
 
 from flask import Flask, redirect, render_template, request, url_for
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import func
 from flask_migrate import Migrate
 from flask_login import login_user, LoginManager, UserMixin, logout_user, login_required, current_user
 from werkzeug.security import check_password_hash
@@ -23,6 +24,7 @@ app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
+
 migrate = Migrate(app, db)
 app.secret_key = "d84yt82y3nc2ut3utnytu2"
 login_manager = LoginManager()
@@ -95,13 +97,27 @@ class Gradebook(db.Model):
     student = db.relationship('Student', foreign_keys=student_id)
     assignment = db.relationship('Assignment', foreign_keys=assignment_id)
 
+#default course id for new students
+course_default = 101
 
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
-        #return render_template("gradebook_main_page.html", grades=Gradebook.query.join(Assignment, Assignment.assignment_id==Gradebook.assignment_id))
-        return render_template("gradebook_main_page.html", grades=db.session.query(Gradebook, Course, Student, Assignment).join(Course, Gradebook.course_id == Course.course_id).join(Student, Gradebook.student_id == Student.student_id).join(Assignment, Gradebook.assignment_id == Assignment.assignment_id))
-  # if request.method == "POST":
+       grades = db.session.query(Gradebook, Course, Student, Assignment).order_by(Student.lastname, Student.firstname).join(Course, Gradebook.course_id == Course.course_id).join(Student, Gradebook.student_id == Student.student_id).join(Assignment, Gradebook.assignment_id == Assignment.assignment_id)
+    average_grade = 0
+    count = 0
+    all_grades = Gradebook.query.all()
+    for student_grade in all_grades:
+           average_grade = student_grade.grade+average_grade
+           count = count+1
+    average_grade = average_grade/count
+        #new_average = db.session.query(func.avg(Gradebook.grade)).join(Course, Gradebook.course_id == Course.course_id).filter(Course.course_id == course_default).scalar()
+    return render_template("gradebook_main_page.html", grades=grades, average_grade=average_grade )
+        #return render_template("gradebook_main_page.html", grades=new_grade)
+
+
+
+ # if request.method == "POST":
         #new_student=Student(firstname=request.form["first_name"],lastname=request.form["last_name"],student_major=request.form["major"], student_email=request.form["email"],course_id=course_default)
        # db.session.add(new_student)
         #db.session.commit()
@@ -118,9 +134,25 @@ def index():
     #db.session.commit()
 
 
+#route displays assignments with capability of adding and deleting assignments
+@app.route("/all_assignments", methods=["GET", "POST"])
+def assignments():
+    if request.method == "GET":
+       return render_template("gradebook_assignments_page.html", assignments=Assignment.query.all())
+    if request.method == "POST":
+        new_assignment=Assignment(assignment_desc=request.form["assignment_name"])
+        db.session.add(new_assignment)
+        db.session.commit()
+    return render_template("gradebook_assignments_page.html", assignments=Assignment.query.all())
 
-#default course id for new students
-course_default = 101
+
+#Deletes assignment from database
+@app.route("/<int:id>/assignment_delete", methods=["POST"])
+def deleteAssignment(id):
+    deleted_assignment = Assignment.query.get_or_404(id)
+    db.session.delete(deleted_assignment)
+    db.session.commit()
+    return redirect(url_for('all_assignments'))
 
 #Webpage display student roster in aphlabetical order, redirects user to add and delete students
 @app.route("/student_roster", methods=["GET", "POST"])
@@ -141,19 +173,25 @@ def deleteStudent(id):
     db.session.commit()
     return redirect(url_for('roster'))
 
-#update feature
-@app.route("/update/", methods=["POST"])
+#Retrieve and displays single student information from database
+@app.route("/<int:id>/student_info", methods=["POST"])
+def viewStudent(id):
+    student_info = db.session.query(Gradebook, Course, Student, Assignment).join(Course, Gradebook.course_id == Course.course_id).join(Student, Gradebook.student_id == Student.student_id).join(Assignment, Gradebook.assignment_id == Assignment.assignment_id).filter(Student.student_id == id)
+    new_average = db.session.query(func.avg(Gradebook.grade)).join(Course, Gradebook.course_id == Course.course_id).join(Student, Gradebook.student_id == Student.student_id).filter(Course.course_id == course_default).filter(Student.student_id == id).scalar()
+    return render_template("gradebook_student_information_page.html", grades=student_info, average_grade = new_average)
+
+#updates students grades
+@app.route("/update_grade/", methods=["POST"])
 def update_grade():
     if request.method == "POST":
         # query.get() method gets a Row by the primary_key
-        record = Student.query.get(request.form.get('id'))
+        record = Gradebook.query.get(request.form.get('id'))
         # change the values you want to update
-        record.student_major = request.form.get('change_grade')
+        record.grade = request.form.get('change_grade')
         # commit changes
-
         db.session.commit()
     # redirect back to your main view
-    return redirect(url_for('roster'))
+    return redirect(url_for('index'))
 
 #login page
 @app.route("/login/", methods=["GET", "POST"])
@@ -170,21 +208,25 @@ def login():
 
     login_user(user)
     return redirect(url_for('index'))
-
+#logout page
 @app.route("/logout/")
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
-#for testing template format and code, route will be deleted
-@app.route("/gradebook/")
-def gradebook():
-    return render_template("gradebook_main_page.html")
+
+
+
+
+
+
+
+
 
 #for Adding assignment records, route will be updated
-@app.route("/assignments/")
-def addAssigment():
+#@app.route("/assignments/")
+#def addAssigment():
 #    assignment1 = Assignment(assignment_desc='Homework 1',course_id=course_default)
 #    db.session.add(assignment1)
 #    assignment2 = Assignment(assignment_desc='Homework 2',course_id=course_default)
@@ -194,7 +236,7 @@ def addAssigment():
 #    assignment4 = Assignment(assignment_desc='Final Exam',course_id=course_default)
 #    db.session.add(assignment4)
 #    db.session.commit()
-    return 'Assignments 1-4 Added'
+#    return 'Assignments 1-4 Added'
 
 @app.route("/add-gradebooks/")
 def addGrade():

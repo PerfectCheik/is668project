@@ -19,9 +19,7 @@
                  <li class="nav-item">
                     <a class="nav-link" href="http://perfectcheik.pythonanywhere.com/student_roster"> Student Roster  </a></li>
                 <li class="nav-item">
-                    <a class="nav-link" href="http://perfectcheik.pythonanywhere.com/assignments"> Assignments  </a></li>
-                <li class="nav-item">
-                    <a class="nav-link" href="http://perfectcheik.pythonanywhere.com/student_information"> Student Information  </a></li>
+                    <a class="nav-link" href="http://perfectcheik.pythonanywhere.com/all_assignments"> Assignments  </a></li>
 
             {% if current_user.is_authenticated %}
                              <li class="nav-item">
@@ -38,7 +36,7 @@
             <br><br>
             <h2> Philosophy 101 - Student Roster</h2>
             <h3> </h3><br>
-
+            {% if current_user.is_authenticated %}
                 <table class="table table-bordered">
                     <thead>
                       <tr>
@@ -48,23 +46,24 @@
                         <th>Email</th>
                         <th>Major</th>
                         <th>Course</th>
-                        <th>Change Major</th>
+                        <th>Student Data</th>
+
                       </tr>
                     </thead>
                     <tbody>
                     {% for student in students %}
                       <tr>
+
                         <td>{{student.student_id}}</td>
                         <td>{{student.firstname}}</td>
                         <td>{{student.lastname}}</td>
                         <td>{{student.student_email}}</td>
                         <td>{{student.student_major}}</td>
                         <td>{{student.course_id}}</td>
+
                         <td>
-                            <form method="POST" action="{{ url_for('update_grade') }}">
-                            <input type="hidden" name="id" value="{{student.student_id}}">
-                            <input type="text" name="change_grade" placeholder="Enter new major">
-                            <button type=submit>update</button>
+                            <form method="POST" action="{{ url_for('viewStudent', id=student.student_id) }}">
+                            <button type=submit class="btn btn-outline-primary">View</button>
                             </form>
                         </td>
                         <td>
@@ -94,9 +93,13 @@
               </div>
 
             </form>
+        {% else %}
 
+        <p>Please login to access gradebook features</p>
 
         </div>
+
+        {% endif %}
 
 
 

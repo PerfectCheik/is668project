@@ -19,9 +19,9 @@
                  <li class="nav-item">
                     <a class="nav-link" href="http://perfectcheik.pythonanywhere.com/student_roster"> Student Roster  </a></li>
                 <li class="nav-item">
-                    <a class="nav-link" href="http://perfectcheik.pythonanywhere.com/assignments"> Assignments  </a></li>
+                    <a class="nav-link" href="http://perfectcheik.pythonanywhere.com/all_assignments"> Assignments  </a></li>
                 <li class="nav-item">
-                    <a class="nav-link" href="http://perfectcheik.pythonanywhere.com/student_information"> Student Information  </a></li>
+
 
             {% if current_user.is_authenticated %}
                              <li class="nav-item">
@@ -38,6 +38,8 @@
             <br><br>
             <h2> Philosophy 101 - Gradebook</h2>
             <h3> </h3><br>
+            {% if current_user.is_authenticated %}
+            <p><b>Class average grade is</b> {{average_grade}}</p>
             <table class="table table-bordered">
                     <thead>
                       <tr>
@@ -47,6 +49,7 @@
                         <th>Last name</th>
                         <th>Assignment</th>
                         <th>Grade</th>
+                        <th>Edit Grade</th>
 
                       </tr>
                     </thead>
@@ -59,13 +62,25 @@
                         <td>{{students.lastname}}</td>
                         <td>{{assignments.assignment_desc}}</td>
                         <td>{{gradebooks.grade}}</td>
+                        <td>
+                         <form method="POST" action="{{ url_for('update_grade') }}">
+                         <input type="hidden" name="id" value="{{gradebooks.gradebook_id}} ">
+                         <input type="text" name="change_grade" placeholder="Enter new grade">
+                         <button type=submit>update</button>
+                         </form>
+                        </td>
                     </tbody>
                     {% endfor %}
               </table>
 
+
+
+
+        {% else %}
+            <p>Please login to access gradebook features</p>
+
+        {% endif %}
         </div>
-
-
 
     </body>
 
