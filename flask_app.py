@@ -111,27 +111,7 @@ def index():
            average_grade = student_grade.grade+average_grade
            count = count+1
     average_grade = average_grade/count
-        #new_average = db.session.query(func.avg(Gradebook.grade)).join(Course, Gradebook.course_id == Course.course_id).filter(Course.course_id == course_default).scalar()
     return render_template("gradebook_main_page.html", grades=grades, average_grade=average_grade )
-        #return render_template("gradebook_main_page.html", grades=new_grade)
-
-
-
- # if request.method == "POST":
-        #new_student=Student(firstname=request.form["first_name"],lastname=request.form["last_name"],student_major=request.form["major"], student_email=request.form["email"],course_id=course_default)
-       # db.session.add(new_student)
-        #db.session.commit()
-    #return render_template ("gradebook_student_roster_page.html", students=Student.query.all())
-
-
-   # if request.method == "GET":
-        #return render_template("main_page.html", comments=Comment.query.all())
-      #  return render_template("gradebook_main_page.html")
-   # if not current_user.is_authenticated:
-    #    return redirect(url_for('index'))
-    #comment = Comment(content=request.form["contents"], commenter=current_user)
-    #db.session.add(comment)
-    #db.session.commit()
 
 
 #route displays assignments with capability of adding and deleting assignments
@@ -219,58 +199,3 @@ def logout():
 
 
 
-
-
-
-
-
-#for Adding assignment records, route will be updated
-#@app.route("/assignments/")
-#def addAssigment():
-#    assignment1 = Assignment(assignment_desc='Homework 1',course_id=course_default)
-#    db.session.add(assignment1)
-#    assignment2 = Assignment(assignment_desc='Homework 2',course_id=course_default)
-#    db.session.add(assignment2)
-#    assignment3 = Assignment(assignment_desc='Term Paper',course_id=course_default)
-#    db.session.add(assignment3)
-#    assignment4 = Assignment(assignment_desc='Final Exam',course_id=course_default)
-#    db.session.add(assignment4)
-#    db.session.commit()
-#    return 'Assignments 1-4 Added'
-
-@app.route("/add-gradebooks/")
-def addGrade():
-#    grade1 = Gradebook(course_id=course_default, student_id = 1 , assignment_id = 1 , grade = 76 )
-#    db.session.add(grade1)
-#    grade2 = Gradebook(course_id=course_default, student_id = 2 , assignment_id = 1 , grade = 88 )
-#    db.session.add(grade2)
-#    grade3 = Gradebook(course_id=course_default, student_id = 3 , assignment_id = 1 , grade = 79 )
-#    db.session.add(grade3)
-#    grade4 = Gradebook(course_id=course_default, student_id = 4 , assignment_id = 1 , grade = 100 )
-#    db.session.add(grade4)
-#    grade5 = Gradebook(course_id=course_default, student_id = 3 , assignment_id = 2 , grade = 99 )
-#    db.session.add(grade5)
-#    grade6 = Gradebook(course_id=course_default, student_id = 4 , assignment_id = 2 , grade = 75 )
-#    db.session.add(grade6)
-#    grade7 = Gradebook(course_id=course_default, student_id = 2 , assignment_id = 2 , grade = 85 )
-#    db.session.add(grade7)
-#    grade8 = Gradebook(course_id=course_default, student_id = 1 , assignment_id = 2 , grade = 100 )
-#    db.session.add(grade8)
-#    grade9 = Gradebook(course_id=course_default, student_id = 2 , assignment_id = 3 , grade = 87 )
-#    db.session.add(grade9)
-#    grade10 = Gradebook(course_id=course_default, student_id = 4 , assignment_id = 3 , grade = 95 )
-#    db.session.add(grade10)
-#    grade11 = Gradebook(course_id=course_default, student_id = 3 , assignment_id = 3 , grade = 70 )
-#    db.session.add(grade11)
-#    grade12 = Gradebook(course_id=course_default, student_id = 1 , assignment_id = 3 , grade = 80 )
-#    db.session.add(grade12)
-#    grade13 = Gradebook(course_id=course_default, student_id = 1 , assignment_id = 4 , grade = 97 )
-#    db.session.add(grade13)
-#    grade14 = Gradebook(course_id=course_default, student_id = 2 , assignment_id = 4 , grade = 100 )
-#    db.session.add(grade14)
-#    grade15 = Gradebook(course_id=course_default, student_id = 3 , assignment_id = 4 , grade = 75 )
-#    db.session.add(grade15)
-#    grade16 = Gradebook(course_id=course_default, student_id = 4 , assignment_id = 4 , grade = 78 )
-#    db.session.add(grade16)
-#    db.session.commit()
-    return 'Grades 1-16 Added'

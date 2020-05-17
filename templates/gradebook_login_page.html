@@ -1,5 +1,12 @@
 <!DOCTYPE html>
 <html>
+    <style>
+    body {
+        font-family: verdana;
+
+    }
+
+</style>
     <head>
       <title>Gradebook</title>
       <meta charset="utf-8">
@@ -19,7 +26,7 @@
                  <li class="nav-item">
                     <a class="nav-link" href="http://perfectcheik.pythonanywhere.com/student_roster"> Student Roster  </a></li>
                 <li class="nav-item">
-                    <a class="nav-link" href="http://perfectcheik.pythonanywhere.com/assignments"> Assignments  </a></li>
+                    <a class="nav-link" href="http://perfectcheik.pythonanywhere.com/all_assignments"> Assignments  </a></li>
 
             {% if current_user.is_authenticated %}
                              <li class="nav-item">
@@ -34,7 +41,7 @@
 
         <div class="container-fluid" >
             <br><br>
-            <h2>Philiospy 101</h2>
+            <h2>Philosophy 101</h2>
             <h3></h3><br>
            <p> <div class="row">
                 {% if error %}
